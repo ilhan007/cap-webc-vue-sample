@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Capire Books </title>
+    <link rel="stylesheet" href="https://unpkg.com/primitive-ui/dist/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        .hovering tr:hover td { color:cyan; background: #123; cursor: pointer; }
+        .rating-stars { color:teal }
+        .succeeded { color:teal }
+        .failed { color:red }
+        .user {text-align: end; color: grey;}
+    </style>
+</head>
+
+<body class="small-container" style="margin-top: 70px;">
+<div id='app'>
+
+    <form class="user" @submit.prevent="login">
+        <div v-if="user">
+            <div v-if="user.tenant">Tenant: {{ user.tenant }}</div>
+            <div> User: {{ user.id }}</div>
+            <div>Locale: {{ user.locale }}</div>
+        </div>
+        <div v-else>
+            <input type="submit" value="Login" class="muted-button">
+            <!-- <a href="/user/login()">Login</a> -->
+        </div>
+    </form>
+
+    <h1> Capire Books </h1>
+
+    <input type="text" placeholder="Search..." @input="search">
+
+    <ui5-table id='books'>
+        <ui5-table-header-row slot="headerRow">
+            <ui5-table-header-cell> Book</ui5-table-header-cell>
+            <ui5-table-header-cell> Title</ui5-table-header-cell>
+            <ui5-table-header-cell> Price </ui5-table-header-cell>
+            <ui5-table-header-cell> Currency </ui5-table-header-cell>
+        </ui5-table-header-row>
+
+        <ui5-table-row
+            v-for="(book, index) in list" 
+            v-bind:id="book.ID" 
+            v-on:click="inspect(book)" 
+            interactive
+        >
+            <ui5-table-cell>{{ book.title }}</ui5-table-cell>
+            <ui5-table-cell>{{ book.author }}</ui5-table-cell>
+            <ui5-table-cell>
+                {{ book.price }}
+            </ui5-table-cell>
+            <ui5-table-cell>{{ book.currency_code }} </ui5-table-cell>
+        </ui5-table-row>
+    </ui5-table>
+	
+    <div v-if="book">
+        <label style="text-align:right">
+            <span class="succeeded"> {{ order.succeeded }} </span>
+            <span class="failed"> {{ order.failed }} </span>
+            &nbsp;&nbsp; {{ book.stock }} in stock
+        </label>
+        <form @submit.prevent="submitOrder" style="float:right; display:flex; flex-direction:row-reverse">
+            <input type="number" v-model="order.quantity" v-bind:class="{ failed: order.failed }" style="width:5em">
+            <input type="submit" value="Order:" class="muted-button">
+        </form>
+        <h4> {{ book.title }} </h4>
+        <p> {{ book.descr }} </p>
+    </div>
+    <div v-else>
+        ( click on a row to see details... )
+    </div>
+
+</div>
+</body>
+
+<script type="module" src="app.js"></script>
+</html>
