@@ -12,7 +12,7 @@ File or Folder | Purpose
 
 ### Start
 
-- Open a new terminal and run `npm i` adn then `npm start`
+- Open a new terminal and run `npm i` and then `npm start`
 - Open `localhost:4004/vue/static`
 
 
